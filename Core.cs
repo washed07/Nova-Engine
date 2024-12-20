@@ -72,8 +72,7 @@ public class Core : Game
             Keyboard.GetState().IsKeyDown(Keys.Escape)) { Exit(); }
 
         // Update the physics engine
-        _engine.Update(gameTime.ElapsedGameTime);
-        Console.WriteLine(gameTime.ElapsedGameTime);
+        _engine.Update(gameTime.ElapsedGameTime.TotalMilliseconds);
 
         base.Update(gameTime);
     }

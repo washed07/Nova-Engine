@@ -8,16 +8,22 @@ using Nova.Physics;
 
 namespace Nova.Bodies;
 
-public class RigidBody(Polygon shape, Vect position, Num mass, Num restitution, float damping = 1, Num initialLinearVelocity = default(Num), Vect direction = default(Vect))
+public class RigidBody(Polygon shape, Vect position, Num mass, Num restitution, float damping = 1, Num initialLinearVelocity = default, Vect direction = default)
 {
     public Polygon Polygon { get; set; } = shape;
     public Vect Position { get; set; } = position;
     public Vect Velocity { get; set; } = initialLinearVelocity * direction;
-    private Vect Acceleration { get; set; }
-    private Num Mass { get; set; } = mass;
+    public Vect Acceleration { get; set; }
+    public Num Mass { get; set; } = mass;
     public Num InverseMass { get; set; }
     public Num Restitution { get; set; } = restitution;
     private Num Damping { get; set; } = damping;
+
+    public Vect AccumulatedForce = Vect.Zero;
+
+    public Vect[] GlobalVerticies => Polygon.TransformedVertices();
+    public Vect[] LocalVerticies => Polygon.Vertices;
+    public Vect CenterPosition => Polygon.GetCentroid() + Position;
 
 
 
@@ -28,28 +34,23 @@ public class RigidBody(Polygon shape, Vect position, Num mass, Num restitution, 
     }
     public void LoadContent() { }
 
-    public void Integrate(TimeSpan deltaTime)
-    {
-        if (IsMassInf()) { return; }
-
-        Velocity += Acceleration * deltaTime.TotalSeconds;
-        Position += Velocity * deltaTime.TotalSeconds;
-
-        Reset();
-    }
-
     public void Move(Vect displacement) { Position -= displacement; }
 
     public void SetVelocity(Vect velocity) { Velocity = velocity; }
 
-    public void Impose(Force force) { Acceleration += force.Sum * InverseMass; }
+    public void ApplyForce(Force force) { AccumulatedForce += force.Sum * InverseMass; }
 
-    private void Damp() { Velocity *= Damping; }
+    public void ClearForces()
+    {
+        AccumulatedForce = Vect.Zero;
+        Acceleration = Vect.Zero;
+    }
+
+    public void Damp() { Velocity *= Damping; }
 
     public void Update() { Polygon.Position = Position; }
 
     public void ResetVelocity() { Velocity = Vect.Zero; }
-    public void Reset() { Acceleration = Vect.Zero; }
 
     public bool IsMassInf() { return (Mass <= 0); }
 }

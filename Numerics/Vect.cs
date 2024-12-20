@@ -67,7 +67,7 @@ public struct Vect(Num x, Num y, Num z = default(Num), Num w = default(Num)) : I
     public Vect Normalize() => Normalize(this);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public readonly Vect Perpendicular() => new(y, -x, z, w);
+    public readonly Vect Perpendicular() => new(-y, x, z, w);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static Vect operator -(Vect a) => new(-a.x, -a.y, -a.z, -a.w);

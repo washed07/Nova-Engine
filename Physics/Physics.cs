@@ -13,11 +13,11 @@ public class NovaPhysics(NovaEngine novaEngine)
 {
     private readonly NovaEngine _novaEngine = novaEngine;
 
-    public Force Gravity { get; set; } = new Gravity((0, 980000000));
+    public Force Gravity { get; set; } = new Gravity((0, 980));
 
     public void Tick(Repository repository, List<RigidBody> bodies)
     {
-        Force.Register(repository, Gravity, bodies);
+        //Force.Register(repository, Gravity, bodies);
 
         foreach (RigidBody body in _novaEngine.Bodies.Where(body => !body.IsMassInf()))
         {

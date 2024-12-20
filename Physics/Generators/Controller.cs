@@ -37,6 +37,6 @@ public class Controller : LinearForce
                 Direction = Vect.Right;
             }
 
-            _controlledBody.Impose(Sum);
+            _controlledBody.SetVelocity(Sum);
         }
 }

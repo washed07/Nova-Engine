@@ -33,7 +33,7 @@ public class Repository()
                     netForce += registry.Force.Sum;
                 }
             }
-            if (netForce != Vect.Zero) { body.Impose(netForce); };
+            if (netForce != Vect.Zero) { body.ApplyForce(netForce); };
         }
     }
 
